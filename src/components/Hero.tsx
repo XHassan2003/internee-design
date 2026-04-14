@@ -1,6 +1,7 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import heroImage from "@/assets/hero-image.jpg";
+import heroImage from "../assets/hero-image.jpg";
 
 const Hero = () => {
   return (

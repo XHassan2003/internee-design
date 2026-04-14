@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { Users, Award, Building2, TrendingUp } from "lucide-react";
 

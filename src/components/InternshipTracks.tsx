@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { Briefcase, Code, Palette, Bot, BarChart3, Smartphone } from "lucide-react";
 
