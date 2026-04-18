@@ -1,5 +1,6 @@
 import React from "react";
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Search,
@@ -33,6 +34,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { internships } from "@/data/internships";
 
 const categories = [
   "All",
@@ -47,212 +49,12 @@ const durations = ["All", "4 Weeks", "8 Weeks", "12 Weeks"];
 const types = ["All", "Remote", "Hybrid", "Onsite"];
 const levels = ["All", "Beginner", "Intermediate", "Advanced"];
 
-type Internship = {
-  title: string;
-  category: string;
-  duration: string;
-  type: string;
-  level: string;
-  slots: number;
-  filled: number;
-  stipend: string;
-  startDate: string;
-  skills: string[];
-  desc: string;
-  featured?: boolean;
-};
-
-const internships: Internship[] = [
-  {
-    title: "Frontend Development",
-    category: "Development",
-    duration: "8 Weeks",
-    type: "Remote",
-    level: "Beginner",
-    slots: 120,
-    filled: 84,
-    stipend: "Unpaid + Certificate",
-    startDate: "May 6, 2026",
-    skills: ["React", "TypeScript", "Tailwind"],
-    desc: "Build modern, responsive web applications using React, TypeScript and Tailwind CSS.",
-    featured: true,
-  },
-  {
-    title: "Graphic Design",
-    category: "Design",
-    duration: "8 Weeks",
-    type: "Remote",
-    level: "Beginner",
-    slots: 80,
-    filled: 47,
-    stipend: "Unpaid + Certificate",
-    startDate: "May 6, 2026",
-    skills: ["Figma", "Branding", "Illustrator"],
-    desc: "Master Figma, branding fundamentals and visual storytelling for digital products.",
-  },
-  {
-    title: "AI Chatbot Development",
-    category: "AI/ML",
-    duration: "12 Weeks",
-    type: "Remote",
-    level: "Intermediate",
-    slots: 60,
-    filled: 52,
-    stipend: "Stipend Eligible",
-    startDate: "May 13, 2026",
-    skills: ["LLMs", "Python", "LangChain"],
-    desc: "Design and deploy intelligent conversational agents with LLMs and modern tooling.",
-    featured: true,
-  },
-  {
-    title: "Data Science",
-    category: "Data",
-    duration: "12 Weeks",
-    type: "Remote",
-    level: "Intermediate",
-    slots: 90,
-    filled: 61,
-    stipend: "Stipend Eligible",
-    startDate: "May 13, 2026",
-    skills: ["Python", "Pandas", "ML"],
-    desc: "Analyze real datasets, build ML models and present actionable insights.",
-  },
-  {
-    title: "Mobile App Development",
-    category: "Development",
-    duration: "12 Weeks",
-    type: "Hybrid",
-    level: "Intermediate",
-    slots: 70,
-    filled: 39,
-    stipend: "Unpaid + Certificate",
-    startDate: "May 20, 2026",
-    skills: ["React Native", "Expo", "APIs"],
-    desc: "Ship cross-platform mobile apps using React Native with real production workflows.",
-  },
-  {
-    title: "Digital Marketing",
-    category: "Marketing",
-    duration: "8 Weeks",
-    type: "Remote",
-    level: "Beginner",
-    slots: 100,
-    filled: 73,
-    stipend: "Unpaid + Certificate",
-    startDate: "May 6, 2026",
-    skills: ["SEO", "Meta Ads", "Content"],
-    desc: "Run real campaigns covering SEO, paid ads, content and growth strategy.",
-  },
-  {
-    title: "UI/UX Design",
-    category: "Design",
-    duration: "8 Weeks",
-    type: "Remote",
-    level: "Beginner",
-    slots: 75,
-    filled: 58,
-    stipend: "Unpaid + Certificate",
-    startDate: "May 6, 2026",
-    skills: ["Figma", "Research", "Prototyping"],
-    desc: "Design user-centered interfaces with research, wireframes and prototyping.",
-    featured: true,
-  },
-  {
-    title: "Backend Development",
-    category: "Development",
-    duration: "12 Weeks",
-    type: "Remote",
-    level: "Intermediate",
-    slots: 65,
-    filled: 41,
-    stipend: "Stipend Eligible",
-    startDate: "May 13, 2026",
-    skills: ["Node.js", "Postgres", "REST"],
-    desc: "Build scalable APIs, databases and authentication with Node.js and Postgres.",
-  },
-  {
-    title: "Business Development",
-    category: "Business",
-    duration: "4 Weeks",
-    type: "Remote",
-    level: "Beginner",
-    slots: 50,
-    filled: 22,
-    stipend: "Unpaid + Certificate",
-    startDate: "April 29, 2026",
-    skills: ["Sales", "GTM", "Outreach"],
-    desc: "Learn sales, partnerships and go-to-market execution from active operators.",
-  },
-  {
-    title: "Cybersecurity Essentials",
-    category: "Development",
-    duration: "12 Weeks",
-    type: "Remote",
-    level: "Advanced",
-    slots: 40,
-    filled: 28,
-    stipend: "Stipend Eligible",
-    startDate: "May 20, 2026",
-    skills: ["Networks", "OWASP", "Pentesting"],
-    desc: "Hands-on labs covering threat modeling, secure coding and ethical hacking.",
-  },
-  {
-    title: "Content Writing",
-    category: "Marketing",
-    duration: "4 Weeks",
-    type: "Remote",
-    level: "Beginner",
-    slots: 60,
-    filled: 31,
-    stipend: "Unpaid + Certificate",
-    startDate: "April 29, 2026",
-    skills: ["SEO Writing", "Editing", "Research"],
-    desc: "Craft long-form articles, landing copy and email campaigns that convert.",
-  },
-  {
-    title: "Product Management",
-    category: "Business",
-    duration: "8 Weeks",
-    type: "Hybrid",
-    level: "Intermediate",
-    slots: 45,
-    filled: 36,
-    stipend: "Stipend Eligible",
-    startDate: "May 6, 2026",
-    skills: ["Roadmaps", "User Research", "Analytics"],
-    desc: "Lead a real squad through discovery, prioritization and delivery cycles.",
-  },
-];
-
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
   transition: { duration: 0.5 },
 };
-
-const perks = [
-  {
-    icon: Award,
-    title: "Verified Certificate",
-    desc: "Industry-recognized completion certificate.",
-  },
-  {
-    icon: Users,
-    title: "Mentor Support",
-    desc: "1:1 guidance from working professionals.",
-  },
-  {
-    icon: CheckCircle2,
-    title: "Real Projects",
-    desc: "Hands-on work that ships to portfolios.",
-  },
-  {
-    icon: Sparkles,
-    title: "Career Boost",
-    desc: "LinkedIn rewrites and interview prep.",
-  },
-];
 
 const stats = [
   { icon: GraduationCap, value: "50,000+", label: "Interns Trained" },
@@ -621,8 +423,8 @@ const Internships = () => {
                           <span className="text-xs font-medium text-primary">
                             {i.category}
                           </span>
-                          <Button size="sm" className="rounded-lg">
-                            Apply Now
+                          <Button size="sm" className="rounded-lg" asChild>
+                            <Link to={`/apply/${i.slug}`}>Apply Now</Link>
                           </Button>
                         </div>
                       </motion.div>
@@ -669,58 +471,6 @@ const Internships = () => {
                 </span>
                 <h3 className="mt-2 font-semibold text-lg">{j.title}</h3>
                 <p className="mt-1.5 text-sm text-muted-foreground">{j.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto">
-            <motion.span
-              {...fadeUp}
-              className="inline-block text-xs font-semibold uppercase tracking-wider text-primary bg-accent px-3 py-1.5 rounded-full"
-            >
-              Success Stories
-            </motion.span>
-            <motion.h2
-              {...fadeUp}
-              transition={{ duration: 0.5, delay: 0.05 }}
-              className="mt-4 text-3xl md:text-4xl font-bold tracking-tight"
-            >
-              Hear From Our Alumni
-            </motion.h2>
-            <motion.p
-              {...fadeUp}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="mt-3 text-muted-foreground"
-            >
-              Real interns, real outcomes — straight out of our last 6 cohorts.
-            </motion.p>
-          </div>
-
-          <div className="mt-12 grid md:grid-cols-3 gap-5">
-            {testimonials.map((t, idx) => (
-              <motion.div
-                key={t.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.05 }}
-                className="bg-card border border-border rounded-2xl p-6 card-elevated flex flex-col"
-              >
-                <Quote className="text-primary/40" size={28} />
-                <p className="mt-3 text-sm leading-relaxed text-foreground/90">
-                  "{t.quote}"
-                </p>
-                <div className="mt-5 pt-5 border-t border-border">
-                  <div className="font-semibold text-sm">{t.name}</div>
-                  <div className="text-xs text-muted-foreground mt-0.5">
-                    {t.role}
-                  </div>
-                </div>
               </motion.div>
             ))}
           </div>
@@ -795,7 +545,6 @@ const Internships = () => {
           </Accordion>
         </div>
       </section>
-
 
       <Footer />
     </div>
