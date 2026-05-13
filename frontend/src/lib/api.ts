@@ -2,7 +2,7 @@
 /// <reference types="vite/client" />
 
 export const API_URL =
-  (import.meta.env.VITE_API_URL as string | undefined) ?? "http://localhost:5173";
+  (import.meta.env.VITE_API_URL as string | undefined) ?? "http://localhost:5000";
 
 export const AUTH_API = `${API_URL}/api/auth`;
 
